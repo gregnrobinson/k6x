@@ -6,7 +6,8 @@ steps:
       - '-c'
       - |
         GCP_SA_JSON=$(find ./creds/*.json)
-        gcloud auth activate-service-account ${_GCP_SA_EMAIL} --key-file=$${GCP_SA_JSON}
+        GCP_SA_EMAIL=$(cat $${GCP_SA_JSON} | jq '.client_email')
+        gcloud auth activate-service-account $${GCP_SA_EMAIL} --key-file=$${GCP_SA_JSON}
         gcloud config set project $PROJECT_ID
 
         echo "******************************************"
@@ -99,6 +100,5 @@ substitutions:
   _GCS_FILE_NAME: "metrics.json"
   _IMG_DEST: "gcr.io/arctiq-data-lab/k6"
   _GCS_BUCKET_NAME: "perf_mon"
-  _K6_VUS: "500"
-  _K6_DURATION: "1m"
-  _GCP_SA_EMAIL: "wireguard-perf-test@arctiq-data-lab.iam.gserviceaccount.com"
+  _K6_VUS: "1"
+  _K6_DURATION: "30s"

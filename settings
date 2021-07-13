@@ -3,9 +3,9 @@ TEST_NAME=wireguard_perfmon_test
 IMG_DEST=gcr.io/${PROJECT_ID}/k6
 LOCATION=northamerica-northeast1
 
-# K6 SETTINGS
-K6_VUS="500"
-K6_DURATION="1m"
+# K6 LOAD TEST SETTINGS
+K6_VUS="1"
+K6_DURATION="30s"
 
 # BIG QUERY SETTINGS
 BQ_DATASET_NAME=wireguard_perfmon_test
@@ -14,8 +14,5 @@ BQ_DATASET_DESCRIPTION=wireguard_perfmon_test
 BQ_TABLE_NAME=wireguard_perfmon_test
 
 # STORAGE SETTINGS
-GCS_FILE_NAME=metrics.json
 GCS_BUCKET_NAME=perf_mon
-
-# GCP SERVICE ACCOUNT (Must match service account within the json file)
-GCP_SA_EMAIL=wireguard-perf-test@arctiq-data-lab.iam.gserviceaccount.com
+GCS_FILE_NAME=metrics.json
