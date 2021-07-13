@@ -1,0 +1,28 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+  - 'build'
+  - '-t'
+  - '${_IMG_DEST}:${_SHORT_SHA}'
+  - '-f'
+  - './image/Dockerfile'
+  - './image/'
+  id: build
+- name: gcr.io/cloud-builders/docker
+  entrypoint: /bin/bash
+  args:
+  - -c
+  - |
+    docker push ${_IMG_DEST}:${_SHORT_SHA}
+  id: push
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - 'tag'
+    - '${_IMG_DEST}:${_SHORT_SHA}'
+    - '${_IMG_DEST}:latest'
+substitutions:
+    _SHORT_SHA:
+    _IMG_DEST: 
+images:
+- '${_IMG_DEST}:${_SHORT_SHA}'
+- '${_IMG_DEST}:latest'

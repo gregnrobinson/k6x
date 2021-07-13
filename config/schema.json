@@ -1,0 +1,159 @@
+[
+  {
+      "mode": "NULLABLE",
+      "name": "metric",
+      "type": "STRING"
+  },
+  {
+      "fields": [
+        {
+          "fields": [
+            {
+              "mode": "NULLABLE",
+              "name": "error_code",
+              "type": "INTEGER"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "error",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "status",
+              "type": "INTEGER"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "url",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "id",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "type",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "scenario",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "proto",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "name",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "method",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "group",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "tls_version",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "expected_response",
+              "type": "BOOLEAN"
+            }
+          ],
+          "mode": "NULLABLE",
+          "name": "tags",
+          "type": "RECORD"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "value",
+          "type": "FLOAT"
+        },
+        {
+          "description": "bq-datetime",
+          "mode": "NULLABLE",
+          "name": "time",
+          "type": "TIMESTAMP"
+        },
+        {
+          "fields": [
+            {
+              "mode": "NULLABLE",
+              "name": "suffix",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "parent",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "tags",
+              "type": "STRING"
+            },
+            {
+              "mode": "NULLABLE",
+              "name": "name",
+              "type": "STRING"
+            }
+          ],
+          "mode": "NULLABLE",
+          "name": "sub",
+          "type": "RECORD"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "tainted",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "submetrics",
+          "type": "STRING"
+        },
+        {
+          "mode": "REPEATED",
+          "name": "thresholds",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "contains",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "type",
+          "type": "STRING"
+        },
+        {
+          "mode": "NULLABLE",
+          "name": "name",
+          "type": "STRING"
+        }
+      ],
+      "mode": "NULLABLE",
+      "name": "data",
+      "type": "RECORD"
+  },
+  {
+    "mode": "NULLABLE",
+    "name": "type",
+    "type": "STRING"
+  }
+]

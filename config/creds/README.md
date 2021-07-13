@@ -11,6 +11,10 @@
 
 # Overview
 
+**Current Dashboard Link:** https://arctiq-data-lab.nn.r.appspot.com/superset/dashboard/telus_dashboard/
+
+![telus_web_architecture](https://user-images.githubusercontent.com/26353407/120719392-3056cc80-c498-11eb-8b8b-8a0c6c3a6026.png)
+
 Ths project is used to Extract, Transform, and Load network data into BigQuery using CloudBuild Pipelines and [NDJSON Datasets](http://ndjson.org/). The pipeline will first extract the data using an opensource package by [K6](https://k6.io/). After K6 collects the data, jq is invoked to clean the output so the dataset can be loaded into BigQuery for analysis. During every run a new JSON dataset is appended to the dataset BigQuery. The datasets are also archived to GCS and time stamped accordingly.
 
 # Prerequisites
@@ -41,7 +45,7 @@ To build and push run the following command:
 
 After the base image is built and pushed to gcr, the data pipelines can be run using the test script which run the data collection and export to a seperate bigquery table that the dashboards are linked to. Each test is function in the test.sh file and can executed by passing the test name after `./test.sh`. For example:
 ```
-./test.sh ddos-local
+./test.sh cidc
 ```
 # GitOps & CloudBuild
 

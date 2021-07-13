@@ -1,0 +1,98 @@
+steps:
+  - name: '${_IMG_DEST}'
+    id: Retrieve Latency Info and Clean Data
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        set -x
+        PROJECT_ID=$(gcloud config list --format 'value(core.project)')
+
+        echo "******************************************"
+        echo "Generate K6 Recipe"
+        echo "******************************************"
+
+        cat > settings <<HERE
+          duration: '${_K6_DURATION}',
+          vus: ${_K6_VUS},
+        HERE
+
+        sed -i "/options/r settings" ./config/recipe.js
+
+        cat ./config/urls | while read line || [[ -n $line ]];
+        do
+        cat >> k6_urls <<HERE
+          res = http.get("${line}");
+          trackDataMetricsPerURL(res);
+        HERE
+        done
+
+        sed -i "/let res;/r k6_urls" ./config/recipe.js
+
+        echo "******************************************"
+        echo "Collect Metrics"
+        echo "******************************************"
+
+        k6 run --insecure-skip-tls-verify --summary-time-unit=ms -http-debug="full" --out json=${_GCS_FILE_NAME} ./config/recipe.js
+
+        sed -i '/vus/d; /gauge/d; /trend/d; /group_duration/d; /iterations/d; /iteration_duration/d; /counter/d; /rate/d; /"metric":"data_received"/d; /"metric":"data_sent"/d' ${_GCS_FILE_NAME}
+        cat ${_GCS_FILE_NAME} | jq -c '.data.tags += {"id":''"'${_TEST_NAME}'"}' | sponge ${_GCS_FILE_NAME}
+
+        echo "******************************************"
+        echo "Load Dataset Into BigQuery"
+        echo "******************************************"
+
+        if [ -n "$(bq ls --filter labels.name:${_BQ_DATASET_NAME} --project_id ${PROJECT_ID})" ]; then
+          bq update ${PROJECT_ID}:${_BQ_DATASET_NAME}.${_BQ_TABLE_NAME} ./config/schema.json
+          bq load \
+            --location=${_LOCATION} \
+            --source_format=${_BQ_DATASET_FORMAT} \
+            --schema=./config/schema.json \
+            --replace=false ${_BQ_DATASET_NAME}.${_BQ_TABLE_NAME} ${_GCS_FILE_NAME}
+        else
+          echo "BIGQUERY DATASET DOES NOT EXIST... CREATING..."
+          bq mk \
+            --location=${_LOCATION} \
+            --dataset \
+            --default_table_expiration 0 \
+            --description "${_BQ_DATASET_DESCRIPTION}" \
+            ${PROJECT_ID}:${_BQ_DATASET_NAME}
+          bq update --set_label name:${_BQ_DATASET_NAME} ${PROJECT_ID}:${_BQ_DATASET_NAME}
+          echo "LOADING DATASET INTO BIGQUERY..."
+          bq load \
+            --location=${_LOCATION} \
+            --source_format=${_BQ_DATASET_FORMAT} \
+            --schema=./config/ddos/schema.json \
+            --replace=false ${_BQ_DATASET_NAME}.${_BQ_TABLE_NAME} ${_GCS_FILE_NAME}
+        fi
+
+        echo "******************************************"
+        echo "Upload Dataset to GCS"
+        echo "******************************************"
+
+        if [ -n "$(gsutil ls gs://${_GCS_BUCKET_NAME}/)" ]; then
+          gsutil cp ./${_GCS_FILE_NAME} gs://${_GCS_BUCKET_NAME}/${_TEST_NAME}/`date +"%m-%d-%Y-%H%M%S"`.json
+        else
+          echo "BUCKET DOES NOT EXIST... CREATING..."
+          gsutil mb -l ${_LOCATION} gs://${_GCS_BUCKET_NAME}/
+
+          echo "UPLOADING DATASET TO GCS..."
+          gsutil cp ./${_GCS_FILE_NAME} gs://${_GCS_BUCKET_NAME}/${_TEST_NAME}/`date +"%m-%d-%Y-%H%M%S"`.json
+        fi
+
+        echo "******************************************"
+        echo "Done"
+        echo "******************************************"
+timeout: 1200s
+substitutions:
+  _TEST_NAME: wireguard_perfmon_test
+  _LOCATION: northamerica-northeast1
+  _BQ_DATASET_NAME: wireguard_perfmon_test
+  _BQ_DATASET_FORMAT: NEWLINE_DELIMITED_JSON
+  _BQ_DATASET_DESCRIPTION: wireguard_perfmon_test
+  _BQ_TABLE_NAME: wireguard_perfmon_test
+  _GCS_FILE_NAME: metrics.json
+  _IMG_DEST: gcr.io/arctiq-data-lab/k6
+  _GCS_BUCKET_NAME: perf_mon
+  _K6_VUS: "500"
+  _K6_DURATION: "1m"
