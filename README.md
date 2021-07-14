@@ -29,6 +29,7 @@ To operate with this repository, make sure you have the following packages insta
 Create and copy your GCP Service Account JSON Key file within the `./config/creds/` directory. K6x will detect it automatically find it and inject it into the container at runtime. No credentials are permenantly stored within the k6x image. All `.json` files are ignored by Git by default.
 
 Either assign the `Editor` role to the Service Account or use only the required roles to satisfy the requirements for k6.
+
 ## Edit `settings.yaml`
 
 Example settings.json
@@ -87,7 +88,7 @@ To run a k6x load test, run the following command:
 ./k6x.sh run
 ```
 
-The `k6:` section in `settings.yaml has the following settings to dictate how k6 should execute the load test.`
+The `k6:` section in `settings.yaml` has the following settings to dictate how k6 should execute the load test.`
 
 ```yaml
 k6:
