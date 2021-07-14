@@ -9,7 +9,7 @@ export GCP_SA_JSON=$(find ./config/creds/*.json)
 environment() {
     echo "Setting up environment..."
     yq e '.substitutions._SHORT_SHA |= env(SHORT_SHA) | .substitutions._SHORT_SHA style="double"' -i ./image/cloudbuild.yaml
-    IMG_DEST=$(yq e '.environment.img_dest' settings.yaml) yq e '.substitutions._IMG_DEST |= env(IMG_DEST) | .substitutions._IMG_DEST style="double"' -i ./image/cloudbuild.yaml
+    IMG_DEST=$(yq e '.environment.img_dest' settings.yaml)             yq e '.substitutions._IMG_DEST          |= env(IMG_DEST)          | .substitutions._IMG_DEST style="double"'          -i ./image/cloudbuild.yaml
     TEST_NAME=$(yq e '.environment.test_name' settings.yaml)           yq e '.substitutions._TEST_NAME         |= env(TEST_NAME)         | .substitutions._TEST_NAME style="double"'         -i ./config/cloudbuild.yaml
     IMG_DEST=$(yq e '.environment.img_dest' settings.yaml)             yq e '.substitutions._IMG_DEST          |= env(IMG_DEST)          | .substitutions._IMG_DEST style="double"'          -i ./config/cloudbuild.yaml
     LOCATION=$(yq e '.environment.location' settings.yaml)             yq e '.substitutions._LOCATION          |= env(LOCATION)          | .substitutions._LOCATION style="double"'          -i ./config/cloudbuild.yaml
