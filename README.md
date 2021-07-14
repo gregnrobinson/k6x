@@ -21,7 +21,7 @@ To operate with this repository, make sure you have the following packages insta
 - [Docker Engine](https://https://docs.docker.com/engine/install/)
 - [yq](https://mikefarah.gitbook.io/yq/) *Used for updaating the Cloudbuild settings from the settings.yaml file*
 
-## Edit `settings.json`
+## Edit `settings.yaml`
 
 Example settings.json
 
