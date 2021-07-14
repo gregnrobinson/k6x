@@ -19,7 +19,7 @@ To operate with this repository, make sure you have the following packages insta
 
 - [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
 - [Docker Engine](https://https://docs.docker.com/engine/install/)
-- [yq](https://mikefarah.gitbook.io/yq/) *Used for updaating the Cloudbuild settings from the settings.yaml file*
+- [yq](https://mikefarah.gitbook.io/yq/) *Used for updating the Cloudbuild settings from the settings.yaml file*
 
 ## Edit `settings.yaml`
 
