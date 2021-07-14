@@ -19,7 +19,7 @@ To operate with this repository, make sure you have the following packages insta
 
 - [Google Cloud SDK](https://cloud.google.com/sdk/docs/install)
 - [Docker Engine](https://https://docs.docker.com/engine/install/)
-- [Python](https://www.python.org/downloads/) *For the helper tool to generate K6 templates and extract URLs*
+- [yq](https://mikefarah.gitbook.io/yq/) *Used for updaating the Cloudbuild settings from the settings.yaml file*
 
 # Build the K6 image
 
@@ -76,9 +76,9 @@ Add the following permissions to `0@appspot.gserviceaccount.com`
 
 Create a CloudBuild schedule by setting the trigger to `manual invocation` and then the option for setting a schedule will appear. 
 
-Now the cloudbuild data pipelines will update the dataset without any internvention. This is useful for keeping graphs and charts that use BigQuery up to date wthout any manual intervention.                                       |
+Now the cloudbuild data pipelines will update the dataset without any internvention. This is useful for keeping graphs and charts that use BigQuery up to date wthout any manual intervention.
+|
 # Reference
-
 - https://cloud.google.com/bigquery/docs/datasets#bq
 - https://cloud.google.com/iam/docs/understanding-roles-
 - https://cloud.google.com/bigquery/docs/reference/bq-cli-reference
