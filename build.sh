@@ -4,7 +4,9 @@ set -o pipefail
 
 export CLOUDSDK_CORE_DISABLE_PROMPTS="1"
 export SHORT_SHA="$(git rev-parse --short HEAD)"
-export PROJECT_ID=$(gcloud config list --format 'value(core.project)')
+export GCP_SA_JSON=$(find ./config/creds/*.json)
+
+gcloud auth activate-service-account --key-file=${GCP_SA_JSON}
 
 environment() {
     yq e '.substitutions._SHORT_SHA |= env(SHORT_SHA) | .substitutions._SHORT_SHA style="double"' -i ./image/cloudbuild.yaml
@@ -34,11 +36,6 @@ run(){
 
     echo "${logo}${LOGO}${normal}"
     echo "${logo}Version: ${BRANCH}-${SHORT_SHA}${normal}"
-    
-    if [ -z "$PROJECT_ID" ]; then 
-        printf 'Enter a Project ID (ctrl^c to exit): '
-        read -r PROJECT_ID
-    fi
 
     LOGGED_IN=$(gcloud auth list 2>&1)
 

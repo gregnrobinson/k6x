@@ -21,7 +21,7 @@ steps:
       - '${_IMG_DEST}:${_SHORT_SHA}'
       - '${_IMG_DEST}:latest'
 substitutions:
-  _SHORT_SHA: "4c8e866"
+  _SHORT_SHA: "444935b"
   _IMG_DEST: "gcr.io/arctiq-data-lab/k6"
 images:
   - '${_IMG_DEST}:${_SHORT_SHA}'
