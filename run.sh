@@ -3,19 +3,18 @@ set -o errexit
 set -o pipefail
 
 environment() {
-  source settings
   echo "Setting up environment..."
-  yq eval '.substitutions._TEST_NAME              |= ''"'$TEST_NAME'"'              -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._IMG_DEST               |= ''"'$IMG_DEST'"'               -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._LOCATION               |= ''"'$LOCATION'"'               -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._K6_VUS                 |= ''"'$K6_VUS'"'                 -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._K6_DURATION            |= ''"'$K6_DURATION'"'            -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._BQ_DATASET_NAME        |= ''"'$BQ_DATASET_NAME'"'        -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._BQ_DATASET_FORMAT      |= ''"'$BQ_DATASET_FORMAT'"'      -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._BQ_DATASET_DESCRIPTION |= ''"'$BQ_DATASET_DESCRIPTION'"' -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._BQ_TABLE_NAME          |= ''"'$BQ_TABLE_NAME'"'          -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._GCS_FILE_NAME          |= ''"'$GCS_FILE_NAME'"'          -i ./config/cloudbuild.yaml
-  yq eval '.substitutions._GCS_BUCKET_NAME        |= ''"'$GCS_BUCKET_NAME'"'        -i ./config/cloudbuild.yaml
+  TEST_NAME=$(yq e '.environment.test_name' settings.yaml)           yq e '.substitutions._TEST_NAME         |= env(TEST_NAME)         | .substitutions._TEST_NAME style="double"'         -i ./config/cloudbuild.yaml
+  IMG_DEST=$(yq e '.environment.img_dest' settings.yaml)             yq e '.substitutions._IMG_DEST          |= env(IMG_DEST)          | .substitutions._IMG_DEST style="double"'          -i ./config/cloudbuild.yaml
+  LOCATION=$(yq e '.environment.location' settings.yaml)             yq e '.substitutions._LOCATION          |= env(LOCATION)          | .substitutions._LOCATION style="double"'          -i ./config/cloudbuild.yaml
+  K6_DURATION=$(yq e '.k6.duration' settings.yaml)                   yq e '.substitutions._K6_DURATION       |= env(K6_DURATION)       | .substitutions._K6_DURATION style="double"'       -i ./config/cloudbuild.yaml
+  K6_VUS=$(yq e '.k6.vus' settings.yaml)                             yq e '.substitutions._K6_VUS            |= env(K6_VUS)            | .substitutions._K6_VUS style="double"'            -i ./config/cloudbuild.yaml
+  BQ_DATASET_NAME=$(yq e '.bigquery.dataset_name' settings.yaml)     yq e '.substitutions._BQ_DATASET_NAME   |= env(BQ_DATASET_NAME)   | .substitutions._BQ_DATASET_NAME style="double"'   -i ./config/cloudbuild.yaml
+  BQ_DATASET_FORMAT=$(yq e '.bigquery.dataset_format' settings.yaml) yq e '.substitutions._BQ_DATASET_FORMAT |= env(BQ_DATASET_FORMAT) | .substitutions._BQ_DATASET_FORMAT style="double"' -i ./config/cloudbuild.yaml
+  BQ_DATASET_DESC=$(yq e '.bigquery.dataset_desc' settings.yaml)     yq e '.substitutions._BQ_DATASET_DESC   |= env(BQ_DATASET_DESC)   | .substitutions._BQ_DATASET_DESC style="double"'   -i ./config/cloudbuild.yaml
+  BQ_TABLE_NAME=$(yq e '.bigquery.table_name' settings.yaml)         yq e '.substitutions._BQ_TABLE_NAME     |= env(BQ_TABLE_NAME)     | .substitutions._BQ_TABLE_NAME style="double"'     -i ./config/cloudbuild.yaml
+  GCS_BUCKET_NAME=$(yq e '.gcs.bucket_name' settings.yaml)           yq e '.substitutions._GCS_BUCKET_NAME   |= env(GCS_BUCKET_NAME)   | .substitutions._GCS_BUCKET_NAME style="double"'   -i ./config/cloudbuild.yaml
+  GCS_FILE_NAME=$(yq e '.gcs.file_name' settings.yaml)               yq e '.substitutions._GCS_FILE_NAME     |= env(GCS_FILE_NAME)     | .substitutions._GCS_FILE_NAME style="double"'     -i ./config/cloudbuild.yaml
 }
 
 ddos-local(){

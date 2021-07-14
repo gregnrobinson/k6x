@@ -15,4 +15,4 @@ BQ_TABLE_NAME=wireguard_perfmon_test
 
 # STORAGE SETTINGS
 GCS_BUCKET_NAME=perf_mon
-GCS_FILE_NAME=metrics.json
+GCS_FILE_NAME=metrics2.json

@@ -1,13 +1,12 @@
 steps:
-  - name: '${_IMG_DEST}'
+  - name: ${_IMG_DEST}
     id: Retrieve Latency Info and Clean Data
-    entrypoint: 'bash'
+    entrypoint: bash
     args:
-      - '-c'
+      - -c
       - |
         GCP_SA_JSON=$(find ./creds/*.json)
-        GCP_SA_EMAIL=$(cat $${GCP_SA_JSON} | jq '.client_email')
-        gcloud auth activate-service-account $${GCP_SA_EMAIL} --key-file=$${GCP_SA_JSON}
+        gcloud auth activate-service-account --key-file=$${GCP_SA_JSON}
         gcloud config set project $PROJECT_ID
 
         echo "******************************************"
@@ -47,8 +46,8 @@ steps:
         echo "******************************************"
         echo "Load Dataset Into BigQuery"
         echo "******************************************"
-
-        if [ -n "$(bq ls --filter labels.name:${_BQ_DATASET_NAME} --project_id ${PROJECT_ID})" ]; then
+        bq ls --filter labels.name:${_BQ_DATASET_NAME} --project_id $PROJECT_ID
+        if [ -n "$(bq ls --filter labels.name:${_BQ_DATASET_NAME} --project_id $PROJECT_ID)" ]; then
           bq update ${PROJECT_ID}:${_BQ_DATASET_NAME}.${_BQ_TABLE_NAME} ./schema.json
           bq load \
             --location=${_LOCATION} \
@@ -61,9 +60,9 @@ steps:
             --location=${_LOCATION} \
             --dataset \
             --default_table_expiration 0 \
-            --description "${_BQ_DATASET_DESCRIPTION}" \
+            --description "${_BQ_DATASET_DESC}" \
             ${PROJECT_ID}:${_BQ_DATASET_NAME}
-          bq update --set_label name:${_BQ_DATASET_NAME} ${PROJECT_ID}:${_BQ_DATASET_NAME} || echo "No update required..."
+          bq update --set_label name:${_BQ_DATASET_NAME} ${PROJECT_ID}:${_BQ_DATASET_NAME}
           echo "LOADING DATASET INTO BIGQUERY..."
           bq load \
             --location=${_LOCATION} \
@@ -92,13 +91,13 @@ steps:
 timeout: 1200s
 substitutions:
   _TEST_NAME: "wireguard_perfmon_test"
-  _LOCATION: "northamerica-northeast1"
-  _BQ_DATASET_NAME: "wireguard_perfmon_test"
-  _BQ_DATASET_FORMAT: "NEWLINE_DELIMITED_JSON"
-  _BQ_DATASET_DESCRIPTION: "wireguard_perfmon_test"
-  _BQ_TABLE_NAME: "wireguard_perfmon_test"
-  _GCS_FILE_NAME: "metrics.json"
   _IMG_DEST: "gcr.io/arctiq-data-lab/k6"
-  _GCS_BUCKET_NAME: "perf_mon"
-  _K6_VUS: "1"
+  _LOCATION: "northamerica-northeast1"
   _K6_DURATION: "30s"
+  _K6_VUS: "1"
+  _BQ_DATASET_NAME: "perftest_dataset"
+  _BQ_DATASET_FORMAT: "NEWLINE_DELIMITED_JSON"
+  _BQ_DATASET_DESC: "perftest"
+  _BQ_TABLE_NAME: "perftest_table"
+  _GCS_BUCKET_NAME: "perfmon_test"
+  _GCS_FILE_NAME: "metrics2.json"

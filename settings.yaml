@@ -1,0 +1,19 @@
+environment:
+  test_name: "wireguard_perfmon_test"
+  img_dest: "gcr.io/arctiq-data-lab/k6"
+  location: "northamerica-northeast1"
+
+k6:
+  duration: "30s"
+  vus: "1"
+
+bigquery:
+  dataset_name: "perftest_dataset"
+  dataset_format: "NEWLINE_DELIMITED_JSON"
+  table_name: "perftest_table"
+  dataset_desc: "perftest"
+
+gcs:
+  bucket_name: "perfmon_test"
+  file_name: "metrics2.json"
+
