@@ -21,6 +21,31 @@ To operate with this repository, make sure you have the following packages insta
 - [Docker Engine](https://https://docs.docker.com/engine/install/)
 - [yq](https://mikefarah.gitbook.io/yq/) *Used for updaating the Cloudbuild settings from the settings.yaml file*
 
+Edit the `settings.yaml` with your own values.
+## Example
+
+```yaml
+environment:
+  name: "perfmon_test"
+  location: "northamerica-northeast1"
+  img_dest: "gcr.io/your_project/k6"
+
+k6:
+  duration: "30s"
+  multiplier: "1" # Define how many synchronous k6 runs should execute
+  vus: "1"
+
+bigquery:
+  dataset_name: "perftest_dataset"
+  dataset_format: "NEWLINE_DELIMITED_JSON"
+  table_name: "perftest_table"
+  dataset_desc: "perftest"
+
+gcs:
+  bucket_name: "perfmon_test"
+  file_name: "metrics.json"
+```
+
 ## Create a Service Account
 
 Place your GCP Service Account JSON Key file within the `./config/creds/` directory. K6x will detect it automatically find it and inject it into the container at runtime. No credentials are permenantly stored within the k6x image. All `.json` files are ignored by Git by default.
@@ -35,25 +60,33 @@ This Dockerfile based on the official [Google Cloiud SDK Dockerfile](https://git
 
 The Dockerfile is located at `./image/Dockerfile`.
 
-To build and push without a prompt for your project id, create an environment variable named `PROJECT_ID`:
-```shell
-export PROJECT_ID="<YOUR_PROJECT_ID>"
-```
-
-To build and push run the following command:
+To build and push an image to GCR, run the following command:
 
 ```shell
-./build.sh
+./k6x.sh build
 ```
-# Test Data Pipelines
+# Run a k6 load test
 
 After the base image is built and pushed to gcr, the data pipelines can be run using the test script which run the data collection and export to a seperate bigquery table that the dashboards are linked to. Each test is function in the test.sh file and can executed by passing the test name after `./test.sh`. For example:
+
+```shell
+./k6x.sh run
 ```
-./test.sh ddos-local
+
+The `k6:` section in `settings.yaml has the following settings to dictate how k6 should execute the load test.`
+
+```yaml
+k6:
+  duration: "30s" # how long should k6 run for
+  multiplier: "1" # Define how many synchronous k6 runs should execute
+  vus: "1" # how many synchronous virtual users should be executing the load tests
 ```
+
+With the addition of the multiplier, you can run up to 10 synchronous k6 runs times the number of virtual users per run. Because k6x runs on Google Cloud Build, you don't have to worry about resource limits on your local machine.
+
 # GitOps & CloudBuild
 
-## Link a repository containing the `./cloudbuild.yaml` file.
+## Link a repository with this source code
 
 Go to the GCP ***console > Cloud Build > Triggers*** to connect your repository and add the trigger details matching the desired expression. The default configuration is a push or merge to the main branch which will trigger the pipeline.
 
@@ -64,12 +97,6 @@ Trigger the pipeline by matching your trigger condition and thats it.
 ## Setup Pipeline Schedule
 
 Setup a CRON schedule to automatically add a new dataset to BigQuery when it becomes available.
-
-To make life easier, set your project ID in the terminall using the following command.
-
-```sh
-export PROJECT_ID="<your_project_id>"
-```
 
 In order to set the schedule it is requried to use the app engine default service account `0@appspot.gserviceaccount.com`. If you have never used app engine, enable the API using the following command:
 

@@ -100,4 +100,4 @@ substitutions:
   _BQ_DATASET_DESC: "perftest"
   _BQ_TABLE_NAME: "perftest_table"
   _GCS_BUCKET_NAME: "perfmon_test"
-  _GCS_FILE_NAME: "metrics2.json"
+  _GCS_FILE_NAME: "metrics.json"
