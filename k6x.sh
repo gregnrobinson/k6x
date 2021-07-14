@@ -38,9 +38,27 @@ cloud(){
 }
 
 run() {
-    MULTIPLIER=$(yq e '.k6.multiplier' settings.yaml)
-    MULTIPLIER=$(echo "$(($MULTIPLIER-1))")
-    echo "multiplier = $MULTIPLIER"
+    logo=$(tput setaf 6)
+    warn=$(tput setaf 3)
+    bold=$(tput bold)
+    normal=$(tput sgr0)
+    
+    SHORT_SHA="$(git rev-parse --short HEAD)"
+    BRANCH="$(git branch --show-current)"
+    LOGO="$(wget -q -O /tmp/logo artii.herokuapp.com/make?text=k6x&font=small)"
+    LOGO="$(cat /tmp/logo)"
+    
+    rm -rf /tmp/logo
+
+    MULTIPLIER=$(yq e '.k6.multiplier' settings.yaml) && MULTIPLIER=$(echo "$(($MULTIPLIER-1))")
+    DURATION=$(yq e '.k6.duration' settings.yaml)
+    VUS=$(yq e '.k6.vus' settings.yaml)
+
+    echo "${logo}${LOGO}${normal}"
+    echo "${logo}Version: ${BRANCH}-${SHORT_SHA}${normal}"
+    echo "${logo}Multiplier: ${MULTIPLIER}${normal}"
+    echo "${logo}Duration: ${DURATION}${normal}"
+    echo "${logo}VUS (Virtual Users): ${VUS}${normal}"
 
     for (( i = 0; i <= $MULTIPLIER; i++ )); do                                            
         cloud $i &                                                                    
