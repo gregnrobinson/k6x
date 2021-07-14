@@ -52,7 +52,7 @@ Place your GCP Service Account JSON Key file within the `./config/creds/` direct
 
 Either assign the `Editor` role to the Service Account or use only the required roles to satisfy the requirements for k6.
 
-# Build the K6 image
+# Build the K6x image
 
 Use the provided `image/cloudbuild_local.yaml` file to build the docker image locally, or use the `image/cloudbuild.yaml` to build the image within Google Cloud Build. the deliniation is that building an image locally uses your own computer and Docker Engine to perform the operations. Building in Google Cloud Build will perform the operations on a GCP VM that is dynamically created at runtime so you delegate the oerations comletely to Google Cloud Build. This is useful for creating a Cloud Build pipeline trigger to run at a desired frequency to update dashboards that read from a Big Query dataset.   
 
@@ -65,7 +65,7 @@ To build and push an image to GCR, run the following command:
 ```shell
 ./k6x.sh build
 ```
-# Run a k6 load test
+# Run a k6x load test
 
 After the base image is built and pushed to gcr, the data pipelines can be run using the test script which run the data collection and export to a seperate bigquery table that the dashboards are linked to. Each test is function in the test.sh file and can executed by passing the test name after `./test.sh`. For example:
 
