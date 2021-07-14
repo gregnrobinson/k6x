@@ -23,6 +23,11 @@ To operate with this repository, make sure you have the following packages insta
 - [Docker Engine](https://https://docs.docker.com/engine/install/)
 - [yq](https://mikefarah.gitbook.io/yq/) *Used for updating the Cloudbuild settings from the settings.yaml file*
 
+## Create a Service Account
+
+Create and copy your GCP Service Account JSON Key file within the `./config/creds/` directory. K6x will detect it automatically find it and inject it into the container at runtime. No credentials are permenantly stored within the k6x image. All `.json` files are ignored by Git by default.
+
+Either assign the `Editor` role to the Service Account or use only the required roles to satisfy the requirements for k6.
 ## Edit `settings.yaml`
 
 Example settings.json
@@ -49,11 +54,16 @@ gcs:
   file_name: "metrics.json"
 ```
 
-## Create a Service Account
+## Edit `./config/urls`
 
-Create and copy your GCP Service Account JSON Key file within the `./config/creds/` directory. K6x will detect it automatically find it and inject it into the container at runtime. No credentials are permenantly stored within the k6x image. All `.json` files are ignored by Git by default.
+Define the list of URLs that K6 should test against. Enter one URL per line.
 
-Either assign the `Editor` role to the Service Account or use only the required roles to satisfy the requirements for k6.
+Example:
+```
+https://google.ca
+https://facebook.com
+...
+```
 
 # Build the K6x image
 
