@@ -17,7 +17,7 @@ environment() {
   GCS_FILE_NAME=$(yq e '.gcs.file_name' settings.yaml)               yq e '.substitutions._GCS_FILE_NAME     |= env(GCS_FILE_NAME)     | .substitutions._GCS_FILE_NAME style="double"'     -i ./config/cloudbuild.yaml
 }
 
-ddos-local(){
+local(){
     environment
     export TEST_PATH="./config"
     rm -rf $TEST_PATH/workspace
@@ -28,7 +28,7 @@ ddos-local(){
       --dryrun=false $TEST_PATH
 }
 
-ddos-cloud(){
+cloud(){
     environment
     export TEST_PATH="./config"
     rm -rf $TEST_PATH/workspace
