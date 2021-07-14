@@ -70,7 +70,7 @@ To build and push the k6x image to GCR, run the following command:
 ```
 # Run a k6x load test
 
-After the base image is built and pushed to gcr, the data pipelines can be run using the test script which run the data collection and export to a seperate bigquery table that the dashboards are linked to. Each test is function in the test.sh file and can executed by passing the test name after `./test.sh`. For example:
+To run a k6x load test, run the following command:
 
 ```shell
 ./k6x.sh run
