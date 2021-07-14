@@ -1,8 +1,9 @@
 # Table of Contents
 - [Overview](#overview)
 - [Prerequisites](#prerequisites)
-  * [Edit `settings.yaml`](#edit--settingsyaml-)
   * [Create a Service Account](#create-a-service-account)
+  * [Edit `settings.yaml`](#edit--settingsyaml-)
+  * [Edit `./config/urls`](#edit---config-urls-)
 - [Build the K6x image](#build-the-k6x-image)
 - [Run a k6x load test](#run-a-k6x-load-test)
 - [GitOps & CloudBuild](#gitops---cloudbuild)
