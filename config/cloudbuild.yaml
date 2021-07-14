@@ -90,7 +90,7 @@ steps:
         echo "******************************************"
 timeout: 1200s
 substitutions:
-  _TEST_NAME: "wireguard_perfmon_test"
+  _TEST_NAME: "null"
   _IMG_DEST: "gcr.io/arctiq-data-lab/k6"
   _LOCATION: "northamerica-northeast1"
   _K6_DURATION: "30s"

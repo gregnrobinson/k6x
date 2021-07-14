@@ -1,28 +1,28 @@
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-  - 'build'
-  - '-t'
-  - '${_IMG_DEST}:${_SHORT_SHA}'
-  - '-f'
-  - './image/Dockerfile'
-  - './image/'
-  id: build
-- name: gcr.io/cloud-builders/docker
-  entrypoint: /bin/bash
-  args:
-  - -c
-  - |
-    docker push ${_IMG_DEST}:${_SHORT_SHA}
-  id: push
-- name: 'gcr.io/cloud-builders/docker'
-  args:
-    - 'tag'
-    - '${_IMG_DEST}:${_SHORT_SHA}'
-    - '${_IMG_DEST}:latest'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_IMG_DEST}:${_SHORT_SHA}'
+      - '-f'
+      - './image/Dockerfile'
+      - './image/'
+    id: build
+  - name: gcr.io/cloud-builders/docker
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        docker push ${_IMG_DEST}:${_SHORT_SHA}
+    id: push
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'tag'
+      - '${_IMG_DEST}:${_SHORT_SHA}'
+      - '${_IMG_DEST}:latest'
 substitutions:
-    _SHORT_SHA:
-    _IMG_DEST: 
+  _SHORT_SHA: "4c8e866"
+  _IMG_DEST: "gcr.io/arctiq-data-lab/k6"
 images:
-- '${_IMG_DEST}:${_SHORT_SHA}'
-- '${_IMG_DEST}:latest'
+  - '${_IMG_DEST}:${_SHORT_SHA}'
+  - '${_IMG_DEST}:latest'

@@ -5,21 +5,19 @@ set -o pipefail
 export CLOUDSDK_CORE_DISABLE_PROMPTS="1"
 export SHORT_SHA="$(git rev-parse --short HEAD)"
 export PROJECT_ID=$(gcloud config list --format 'value(core.project)')
-export IMG_DEST="gcr.io/${PROJECT_ID}/k6x"
 
-yaml_substitutions(){
-    echo "Setting up inventory files..."
+environment() {
+    yq e '.substitutions._SHORT_SHA |= env(SHORT_SHA) | .substitutions._SHORT_SHA style="double"' -i ./image/cloudbuild.yaml
+    IMG_DEST=$(yq e '.environment.img_dest' settings.yaml) yq e '.substitutions._IMG_DEST |= env(IMG_DEST) | .substitutions._IMG_DEST style="double"' -i ./image/cloudbuild.yaml
 }
 
 build(){
-    yaml_substitutions
-
+    environment
     gcloud components install cloud-build-local -q
     gcloud components update cloud-build-local -q
 
-    gcloud builds submit\
-    --substitutions=_IMG_DEST=$IMG_DEST,_SHORT_SHA=$SHORT_SHA \
-    --config ./image/cloudbuild_local.yaml
+    gcloud builds submit \
+        --config ./image/cloudbuild.yaml
 }
 
 run(){
@@ -30,7 +28,7 @@ run(){
     
     BRANCH="$(git branch --show-current)"
 
-    LOGO="$(wget -q -O /tmp/logo artii.herokuapp.com/make?text=Docker+Builder&font=small)"
+    LOGO="$(wget -q -O /tmp/logo artii.herokuapp.com/make?text=k6x&font=small)"
     LOGO="$(cat /tmp/logo)"
     rm -rf /tmp/logo
 

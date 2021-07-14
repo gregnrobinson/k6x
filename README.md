@@ -21,11 +21,19 @@ To operate with this repository, make sure you have the following packages insta
 - [Docker Engine](https://https://docs.docker.com/engine/install/)
 - [yq](https://mikefarah.gitbook.io/yq/) *Used for updaating the Cloudbuild settings from the settings.yaml file*
 
+## Create a Service Account
+
+Place your GCP Service Account JSON Key file within the `./config/creds/` directory. K6x will detect it automatically find it and inject it into the container at runtime. No credentials are permenantly stored within the k6x image. All `.json` files are ignored by Git by default.
+
+Either assign the `Editor` role to the Service Account or use only the required roles to satisfy the requirements for k6.
+
 # Build the K6 image
 
-Use the provided `image/cloudbuild.yaml` and `image/Dockerfile` to perform a build task on the image the same way the pipeline would. This is useful for debugging.
+Use the provided `image/cloudbuild_local.yaml` file to build the docker image locally, or use the `image/cloudbuild.yaml` to build the image within Google Cloud Build. the deliniation is that building an image locally uses your own computer and Docker Engine to perform the operations. Building in Google Cloud Build will perform the operations on a GCP VM that is dynamically created at runtime so you delegate the oerations comletely to Google Cloud Build. This is useful for creating a Cloud Build pipeline trigger to run at a desired frequency to update dashboards that read from a Big Query dataset.   
 
-This Dockerfile nuilt upon the official [Google Cloiud SDK Dockerfile](https://github.com/GoogleCloudPlatform/cloud-sdk-docker/blob/master/Dockerfile) with the additional components including ethr and K6 for metric collection.
+This Dockerfile based on the official [Google Cloiud SDK Dockerfile](https://github.com/GoogleCloudPlatform/cloud-sdk-docker/blob/master/Dockerfile) with the additional components including K6 and other dependancy requirements for handling data.
+
+The Dockerfile is located at `./image/Dockerfile`.
 
 To build and push without a prompt for your project id, create an environment variable named `PROJECT_ID`:
 ```shell

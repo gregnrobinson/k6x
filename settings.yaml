@@ -1,11 +1,13 @@
 environment:
-  test_name: "wireguard_perfmon_test"
-  img_dest: "gcr.io/arctiq-data-lab/k6"
+  name: "wireguard_perfmon_test"
   location: "northamerica-northeast1"
+  img_dest: "gcr.io/arctiq-data-lab/k6"
 
 k6:
   duration: "30s"
+  multiplier: "2" # Define how many synchronous k6 runs should execute
   vus: "1"
+
 
 bigquery:
   dataset_name: "perftest_dataset"
