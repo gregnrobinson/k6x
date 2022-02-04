@@ -2,35 +2,39 @@
 set -o errexit
 set -o pipefail
 
+export GCP_PROJECT_ID="greg-apigee-hybrid-eks"
 export CLOUDSDK_CORE_DISABLE_PROMPTS="1"
 export SHORT_SHA="$(git rev-parse --short HEAD)"
 #export GCP_SA_JSON=$(find ./config/creds/*.json)
 
 environment() {
+
     echo "Setting up environment..."
-    yq e '.substitutions._SHORT_SHA |= env(SHORT_SHA) | .substitutions._SHORT_SHA style="double"' -i ./image/cloudbuild.yaml
-    IMG_DEST=$(yq e '.environment.img_dest' settings.yaml)             yq e '.substitutions._IMG_DEST          |= env(IMG_DEST)          | .substitutions._IMG_DEST style="double"'          -i ./image/cloudbuild.yaml
-    TEST_NAME=$(yq e '.environment.test_name' settings.yaml)           yq e '.substitutions._TEST_NAME         |= env(TEST_NAME)         | .substitutions._TEST_NAME style="double"'         -i ./config/cloudbuild.yaml
-    IMG_DEST=$(yq e '.environment.img_dest' settings.yaml)             yq e '.substitutions._IMG_DEST          |= env(IMG_DEST)          | .substitutions._IMG_DEST style="double"'          -i ./config/cloudbuild.yaml
-    LOCATION=$(yq e '.environment.location' settings.yaml)             yq e '.substitutions._LOCATION          |= env(LOCATION)          | .substitutions._LOCATION style="double"'          -i ./config/cloudbuild.yaml
-    K6_DURATION=$(yq e '.k6.duration' settings.yaml)                   yq e '.substitutions._K6_DURATION       |= env(K6_DURATION)       | .substitutions._K6_DURATION style="double"'       -i ./config/cloudbuild.yaml
-    K6_VUS=$(yq e '.k6.vus' settings.yaml)                             yq e '.substitutions._K6_VUS            |= env(K6_VUS)            | .substitutions._K6_VUS style="double"'            -i ./config/cloudbuild.yaml
-    BQ_DATASET_NAME=$(yq e '.bigquery.dataset_name' settings.yaml)     yq e '.substitutions._BQ_DATASET_NAME   |= env(BQ_DATASET_NAME)   | .substitutions._BQ_DATASET_NAME style="double"'   -i ./config/cloudbuild.yaml
-    BQ_DATASET_FORMAT=$(yq e '.bigquery.dataset_format' settings.yaml) yq e '.substitutions._BQ_DATASET_FORMAT |= env(BQ_DATASET_FORMAT) | .substitutions._BQ_DATASET_FORMAT style="double"' -i ./config/cloudbuild.yaml
-    BQ_DATASET_DESC=$(yq e '.bigquery.dataset_desc' settings.yaml)     yq e '.substitutions._BQ_DATASET_DESC   |= env(BQ_DATASET_DESC)   | .substitutions._BQ_DATASET_DESC style="double"'   -i ./config/cloudbuild.yaml
-    BQ_TABLE_NAME=$(yq e '.bigquery.table_name' settings.yaml)         yq e '.substitutions._BQ_TABLE_NAME     |= env(BQ_TABLE_NAME)     | .substitutions._BQ_TABLE_NAME style="double"'     -i ./config/cloudbuild.yaml
-    GCS_BUCKET_NAME=$(yq e '.gcs.bucket_name' settings.yaml)           yq e '.substitutions._GCS_BUCKET_NAME   |= env(GCS_BUCKET_NAME)   | .substitutions._GCS_BUCKET_NAME style="double"'   -i ./config/cloudbuild.yaml
-    GCS_FILE_NAME=$(yq e '.gcs.file_name' settings.yaml)               yq e '.substitutions._GCS_FILE_NAME     |= env(GCS_FILE_NAME)     | .substitutions._GCS_FILE_NAME style="double"'     -i ./config/cloudbuild.yaml
+    yq  ".substitutions._SHORT_SHA |= env(SHORT_SHA) | .substitutions._SHORT_SHA style='double'" -i ./image/cloudbuild.yaml
+    PROJECT_ID=$(yq '.environment.project_id' settings.yaml)         yq '.substitutions._PROJECT_ID        |= env(PROJECT_ID)        | .substitutions._PROJECT_ID style="double"'        -i ./image/cloudbuild.yaml
+    IMG_DEST=$(yq '.environment.img_dest' settings.yaml)             yq '.substitutions._IMG_DEST          |= env(IMG_DEST)          | .substitutions._IMG_DEST style="double"'          -i ./image/cloudbuild.yaml
+    TEST_NAME=$(yq '.environment.test_name' settings.yaml)           yq '.substitutions._TEST_NAME         |= env(TEST_NAME)         | .substitutions._TEST_NAME style="double"'         -i ./config/cloudbuild.yaml
+    IMG_DEST=$(yq '.environment.img_dest' settings.yaml)             yq '.substitutions._IMG_DEST          |= env(IMG_DEST)          | .substitutions._IMG_DEST style="double"'          -i ./config/cloudbuild.yaml
+    LOCATION=$(yq '.environment.location' settings.yaml)             yq '.substitutions._LOCATION          |= env(LOCATION)          | .substitutions._LOCATION style="double"'          -i ./config/cloudbuild.yaml
+    K6_DURATION=$(yq '.k6.duration' settings.yaml)                   yq '.substitutions._K6_DURATION       |= env(K6_DURATION)       | .substitutions._K6_DURATION style="double"'       -i ./config/cloudbuild.yaml
+    K6_VUS=$(yq '.k6.vus' settings.yaml)                             yq '.substitutions._K6_VUS            |= env(K6_VUS)            | .substitutions._K6_VUS style="double"'            -i ./config/cloudbuild.yaml
+    BQ_DATASET_NAME=$(yq '.bigquery.dataset_name' settings.yaml)     yq '.substitutions._BQ_DATASET_NAME   |= env(BQ_DATASET_NAME)   | .substitutions._BQ_DATASET_NAME style="double"'   -i ./config/cloudbuild.yaml
+    BQ_DATASET_FORMAT=$(yq '.bigquery.dataset_format' settings.yaml) yq '.substitutions._BQ_DATASET_FORMAT |= env(BQ_DATASET_FORMAT) | .substitutions._BQ_DATASET_FORMAT style="double"' -i ./config/cloudbuild.yaml
+    BQ_DATASET_DESC=$(yq '.bigquery.dataset_desc' settings.yaml)     yq '.substitutions._BQ_DATASET_DESC   |= env(BQ_DATASET_DESC)   | .substitutions._BQ_DATASET_DESC style="double"'   -i ./config/cloudbuild.yaml
+    BQ_TABLE_NAME=$(yq '.bigquery.table_name' settings.yaml)         yq '.substitutions._BQ_TABLE_NAME     |= env(BQ_TABLE_NAME)     | .substitutions._BQ_TABLE_NAME style="double"'     -i ./config/cloudbuild.yaml
+    GCS_BUCKET_NAME=$(yq '.gcs.bucket_name' settings.yaml)           yq '.substitutions._GCS_BUCKET_NAME   |= env(GCS_BUCKET_NAME)   | .substitutions._GCS_BUCKET_NAME style="double"'   -i ./config/cloudbuild.yaml
+    GCS_FILE_NAME=$(yq '.gcs.file_name' settings.yaml)                yq '.substitutions._GCS_FILE_NAME     |= env(GCS_FILE_NAME)     | .substitutions._GCS_FILE_NAME style="double"'     -i ./config/cloudbuild.yaml
 }
 
 environment
 
 build(){
-    gcloud components install cloud-build-local -q
-    gcloud components update cloud-build-local -q
+    gcloud config set project ${GCP_PROJECT_ID}
+   #sudo apt-get install google-cloud-sdk-cloud-build-local
+    #gcloud components install cloud-build-local -q
+    #gcloud components update cloud-build-local -q
 
-    gcloud builds submit \
-        --config ./image/cloudbuild.yaml
+    gcloud builds submit --config ./image/cloudbuild.yaml
 }
 
 local(){
@@ -64,9 +68,9 @@ run() {
     
     rm -rf /tmp/logo
 
-    MULTIPLIER=$(yq e '.k6.multiplier' settings.yaml) && MULTIPLIER=$(echo "$(($MULTIPLIER-1))")
-    DURATION=$(yq e '.k6.duration' settings.yaml)
-    VUS=$(yq e '.k6.vus' settings.yaml)
+    MULTIPLIER=$(yq '.k6.multiplier' settings.yaml) && MULTIPLIER=$(echo "$(($MULTIPLIER-1))")
+    DURATION=$(yq '.k6.duration' settings.yaml)
+    VUS=$(yq '.k6.vus' settings.yaml)
 
     echo "${logo}${LOGO}${normal}"
     echo "${logo}Version: ${BRANCH}-${SHORT_SHA}${normal}"

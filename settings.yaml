@@ -1,7 +1,8 @@
 environment:
   name: "wireguard_perfmon_test"
+  project_id: "greg-apigee-hybrid-eks" 
   location: "northamerica-northeast1"
-  img_dest: "gcr.io/arctiq-data-lab/k6"
+  img_dest: "gcr.io/greg-apigee-hybrid-eks/k6"
 
 k6:
   duration: "1m"
