@@ -94,7 +94,7 @@ substitutions:
   _TEST_NAME: "null"
   _LOCATION: "northamerica-northeast1"
   _K6_DURATION: "5m"
-  _K6_VUS: "1000"
+  _K6_VUS: "2000"
   _BQ_DATASET_NAME: "perftest_dataset"
   _BQ_DATASET_FORMAT: "NEWLINE_DELIMITED_JSON"
   _BQ_DATASET_DESC: "perftest"
