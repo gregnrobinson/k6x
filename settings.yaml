@@ -5,9 +5,9 @@ environment:
   img_dest: "gcr.io/greg-apigee-hybrid-eks/k6"
 
 k6:
-  duration: "1m"
-  multiplier: "5" # Define how many synchronous k6 runs should execute
-  vus: "500"
+  duration: "5m"
+  multiplier: "8" # Define how many synchronous k6 runs should execute
+  vus: "1000"
 
 bigquery:
   dataset_name: "perftest_dataset"

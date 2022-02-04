@@ -3,7 +3,7 @@ steps:
     args:
       - 'build'
       - '-t'
-      - '${_IMG_DEST}:${_SHORT_SHA}'
+      - 'gcr.io/${_PROJECT_ID}/k6:${_SHORT_SHA}'
       - '-f'
       - './image/Dockerfile'
       - './image/'
@@ -13,16 +13,16 @@ steps:
     args:
       - -c
       - |
-        docker push ${_IMG_DEST}:${_SHORT_SHA}
+        docker push gcr.io/${_PROJECT_ID}/k6:${_SHORT_SHA}
     id: push
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'tag'
-      - '${_IMG_DEST}:${_SHORT_SHA}'
-      - '${_IMG_DEST}:latest'
+      - 'gcr.io/${_PROJECT_ID}/k6:${_SHORT_SHA}'
+      - 'gcr.io/${_PROJECT_ID}/k6:latest'
 substitutions:
-  _SHORT_SHA: "fe535db"
-  _IMG_DEST: "gcr.io/${_PROJECT_ID}/k6"
+  _PROJECT_ID: "greg-apigee-hybrid-eks"
+  _SHORT_SHA: "f0405dd"
 images:
-  - '${_IMG_DEST}:${_SHORT_SHA}'
-  - '${_IMG_DEST}:latest'
+  - 'gcr.io/${_PROJECT_ID}/k6:${_SHORT_SHA}'
+  - 'gcr.io/${_PROJECT_ID}/k6:latest'
