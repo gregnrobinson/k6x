@@ -4,7 +4,7 @@ set -o pipefail
 
 export CLOUDSDK_CORE_DISABLE_PROMPTS="1"
 export SHORT_SHA="$(git rev-parse --short HEAD)"
-export GCP_SA_JSON=$(find ./config/creds/*.json)
+#export GCP_SA_JSON=$(find ./config/creds/*.json)
 
 environment() {
     echo "Setting up environment..."
