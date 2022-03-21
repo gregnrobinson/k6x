@@ -32,6 +32,8 @@ build(){
 }
 
 local(){
+    gcloud components install cloud-build-local -q
+    gcloud components update cloud-build-local -q
     environment
     export TEST_PATH="./config"
     rm -rf $TEST_PATH/workspace
