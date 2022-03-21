@@ -21,17 +21,13 @@ environment() {
     BQ_DATASET_DESC=$(yq '.bigquery.dataset_desc' settings.yaml)     yq '.substitutions._BQ_DATASET_DESC   |= env(BQ_DATASET_DESC)   | .substitutions._BQ_DATASET_DESC style="double"'   -i ./config/cloudbuild.yaml
     BQ_TABLE_NAME=$(yq '.bigquery.table_name' settings.yaml)         yq '.substitutions._BQ_TABLE_NAME     |= env(BQ_TABLE_NAME)     | .substitutions._BQ_TABLE_NAME style="double"'     -i ./config/cloudbuild.yaml
     GCS_BUCKET_NAME=$(yq '.gcs.bucket_name' settings.yaml)           yq '.substitutions._GCS_BUCKET_NAME   |= env(GCS_BUCKET_NAME)   | .substitutions._GCS_BUCKET_NAME style="double"'   -i ./config/cloudbuild.yaml
-    GCS_FILE_NAME=$(yq '.gcs.file_name' settings.yaml)                yq '.substitutions._GCS_FILE_NAME     |= env(GCS_FILE_NAME)     | .substitutions._GCS_FILE_NAME style="double"'     -i ./config/cloudbuild.yaml
+    GCS_FILE_NAME=$(yq '.gcs.file_name' settings.yaml)               yq '.substitutions._GCS_FILE_NAME     |= env(GCS_FILE_NAME)     | .substitutions._GCS_FILE_NAME style="double"'     -i ./config/cloudbuild.yaml
 }
 
 
 build(){
     environment
     gcloud config set project ${GCP_PROJECT_ID}
-   #sudo apt-get install google-cloud-sdk-cloud-build-local
-    #gcloud components install cloud-build-local -q
-    #gcloud components update cloud-build-local -q
-
     gcloud builds submit --config ./image/cloudbuild.yaml
 }
 
