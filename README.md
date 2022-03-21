@@ -38,7 +38,7 @@ Example settings.json
 environment:
   name: "perfmon_test"
   location: "northamerica-northeast1"
-  img_dest: "gcr.io/your_project/k6x"
+  img_dest: "gcr.io/gregnrobinson/k6x"
 
 k6:
   duration: "30s"
