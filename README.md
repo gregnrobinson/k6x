@@ -36,14 +36,15 @@ Example settings.json
 
 ```yaml
 environment:
-  name: "perfmon_test"
+  name: "wireguard_perfmon_test"
+  project_id: "greg-apigee-hybrid-eks" 
   location: "northamerica-northeast1"
-  img_dest: "gcr.io/gregnrobinson/k6x"
+  img_dest: "gcr.io/greg-apigee-hybrid-eks/k6"
 
 k6:
-  duration: "30s"
-  multiplier: "1" # Define how many synchronous k6 runs should execute
-  vus: "1"
+  duration: "8m"
+  multiplier: "10" # Define how many synchronous k6 runs should execute
+  vus: "1000"
 
 bigquery:
   dataset_name: "perftest_dataset"
