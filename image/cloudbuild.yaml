@@ -22,7 +22,7 @@ steps:
       - 'gcr.io/${_PROJECT_ID}/k6:latest'
 substitutions:
   _PROJECT_ID: "greg-apigee-hybrid-eks"
-  _SHORT_SHA: "e0cf211"
+  _SHORT_SHA: "ac3808a"
 images:
   - 'gcr.io/${_PROJECT_ID}/k6:${_SHORT_SHA}'
   - 'gcr.io/${_PROJECT_ID}/k6:latest'

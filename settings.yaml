@@ -7,7 +7,7 @@ environment:
 k6:
   duration: "8m"
   multiplier: "10" # Define how many synchronous k6 runs should execute
-  vus: "2000"
+  vus: "1000"
 
 bigquery:
   dataset_name: "perftest_dataset"
